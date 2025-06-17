@@ -20,7 +20,7 @@ services:
     ports:
       - "8080:8000"
     env_file:
-      - ${PWD}/src/app/.prod_env
+      - ${PWD}/src/.env_prod
 
   postgresql:
     build:
@@ -39,7 +39,7 @@ services:
     networks:
       - net-bridge
     env_file:
-      - ${PWD}/src/app/.prod_env
+      - ${PWD}/src/.env_prod
 
   redis:
     build:
