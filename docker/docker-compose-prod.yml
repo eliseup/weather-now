@@ -1,0 +1,70 @@
+name: weather-now-prod
+
+services:
+  app:
+    image: weather-now-app-prod:latest
+    hostname: "app"
+    deploy:
+      replicas: 1
+      restart_policy: 
+        condition: on-failure
+      labels:
+        com.weather-now.project: "Weather Now"
+        com.weather-now.service: "app"
+    depends_on:
+      - postgresql
+    volumes:
+      - logs:/usr/src/logs
+    networks:
+      - net-bridge
+    ports:
+      - "8080:8000"
+    env_file:
+      - ${PWD}/src/app/.prod_env
+
+  postgresql:
+    build:
+      context: ./prod/postgresql
+    image: weather-now-postgresql-prod:latest
+    hostname: "postgresql"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        com.weather-now.project: "Weather Now"
+        com.weather-now.service: "postgresql"
+    volumes:
+      - postgresql_db:/var/lib/postgresql/data
+    networks:
+      - net-bridge
+    env_file:
+      - ${PWD}/src/app/.prod_env
+
+  redis:
+    build:
+      context: ./prod/redis
+    image: weather-now-redis-prod:latest
+    hostname: "redis"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        com.weather-now.project: "Weather Now"
+        com.weather-now.service: "redis"
+    volumes:
+      - redis_db:/data
+    networks:
+      - net-bridge
+
+volumes:
+  logs:
+  postgresql_db:
+  redis_db:
+
+networks:
+  net-bridge:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"

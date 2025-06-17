@@ -1,0 +1,12 @@
+*.pyc
+*.bak
+*.swp
+.env
+
+app.egg-info/
+.idea/
+logs/
+venv/
+__pycache__/
+
+
