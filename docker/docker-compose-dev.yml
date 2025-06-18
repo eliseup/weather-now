@@ -15,12 +15,38 @@ services:
         com.weather-now.service: "app"
     depends_on:
       - postgresql
+      - redis
     volumes:
       - ${PWD}/src/app:/usr/src/app
+      - ${PWD}/src/logs:/usr/src/logs
     networks:
       - net-bridge
     ports:
       - "8009:8000"
+    env_file:
+      - ${PWD}/src/.env_dev
+
+  celery_worker:
+    build:
+      context: ./dev/app
+    command: celery -A weather_api worker -Q celery --loglevel=info
+    image: weather-now-app:latest
+    hostname: "celery_worker"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        com.weather-now.project: "Weather Now"
+        com.weather-now.service: "celery worker"
+    depends_on:
+      - postgresql
+      - redis
+    volumes:
+      - ${PWD}/src/app:/usr/src/app
+      - ${PWD}/src/logs:/usr/src/logs
+    networks:
+      - net-bridge
     env_file:
       - ${PWD}/src/.env_dev
 

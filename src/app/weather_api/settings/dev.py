@@ -3,7 +3,6 @@ from .base import *
 
 DEBUG = True
 ALLOWED_HOSTS = ['*']
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # Database
 DATABASES = {
