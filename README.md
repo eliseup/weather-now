@@ -49,8 +49,22 @@ After cloning the repository, follow these steps:
    ```bash
    cd weather-now
    ```
+   
+2. **Create the logs directory**
+   ```bash
+   mkdir -p ./src/logs
+   ```
 
-2. **Start Development Containers**
+3. **Create the development .env_dev file with initial content**
+   ```bash
+   echo -e "POSTGRES_USER=user\nPOSTGRES_DB=weather_db\nPOSTGRES_PASSWORD=pw123\n\nDJANGO_DB_USER=user\nDJANGO_DB_NAME=weather_db\nDJANGO_DB_PASSWORD=pw123\nDJANGO_DB_HOST=postgresql\n\nDJANGO_SETTINGS_MODULE=weather_api.settings.dev\nDJANGO_SECRET_KEY=secret_key\n\nOPENWEATHER_API_KEY=some_data" > ./src/.env_dev
+   ```
+
+4. **Edit the .env_dev file accordingly**
+   - Use any text editor you prefer.
+   
+
+5. **Start Development Containers**
     - To start the development environment, use the following command:
    ```bash
    docker compose -f docker/docker-compose-dev.yml up
@@ -62,7 +76,7 @@ After cloning the repository, follow these steps:
 
 In another terminal, access the containers:
 
-3. **Access the application container**
+6. **Access the application container**
    ```bash
    docker exec -it weather-now-app-1 bash
    ```   
@@ -70,14 +84,15 @@ In another terminal, access the containers:
       ```bash
       python manage.py migrate
       ```
+      
+    - **Run tests:**
+      ```bash
+      python manage.py test
+      ```
 
     - **Start the Django development server:**
       ```bash
       python manage.py runserver 0.0.0.0:8000
-      ```  
-    - **Run tests:**
-      ```bash
-      python manage.py test
       ```
 
 **Port Mapping for Django Development Server**
